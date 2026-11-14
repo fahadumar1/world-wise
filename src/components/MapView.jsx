@@ -44,7 +44,12 @@ const MapView = () => {
       fetchUserLocation();
     }
   }, []);
-
+  useEffect(() => {
+    if (mapLat && mapLng) {
+      setMapPosition([mapLat, mapLng]);
+      return;
+    }
+  }, [mapLat, mapLng]);
   return (
     <div className={styles.mapContainer}>
       {(userLocation[0] === mapPosition[0] &&
