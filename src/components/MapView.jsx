@@ -10,6 +10,7 @@ import {
   Popup,
   useMap,
   useMapEvent,
+  useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -89,6 +90,7 @@ const MapView = () => {
         <ChangeView position={mapPosition} />
         <SetViewOnClick setMapPosition={setMapPosition} />
         <LocationMarker userLocation={userLocation} />
+        <LocationTracker setMapPosition={setMapPosition} />
       </MapContainer>
     </div>
   );
@@ -101,7 +103,7 @@ const ChangeView = ({ position }) => {
 
 const SetViewOnClick = () => {
   const navigate = useNavigate();
-  const map = useMapEvent("click", (e) => {
+  useMapEvent("click", (e) => {
     navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
   });
 
@@ -116,4 +118,13 @@ function LocationMarker({ userLocation }) {
   );
 }
 
+function LocationTracker({ setMapPosition }) {
+  useMapEvents({
+    dragend: (e) => {
+      const { lat, lng } = e.target.getCenter();
+      setMapPosition([lat, lng]);
+    },
+  });
+  return null;
+}
 export default MapView;
