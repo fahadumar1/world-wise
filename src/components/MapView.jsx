@@ -1,9 +1,16 @@
 import Button from "./Button";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCitiesProvider } from "../contexts/CitiesContext";
 import styles from "./Map.module.css";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  useMapEvent,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 const MapView = () => {
@@ -80,6 +87,7 @@ const MapView = () => {
           </Marker>
         ))}
         <ChangeView position={mapPosition} />
+        <SetViewOnClick setMapPosition={setMapPosition} />
         <LocationMarker userLocation={userLocation} />
       </MapContainer>
     </div>
@@ -88,6 +96,15 @@ const MapView = () => {
 const ChangeView = ({ position }) => {
   const map = useMap();
   map.setView(position);
+  return null;
+};
+
+const SetViewOnClick = () => {
+  const navigate = useNavigate();
+  const map = useMapEvent("click", (e) => {
+    navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
+  });
+
   return null;
 };
 
