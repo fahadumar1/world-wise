@@ -1,8 +1,5 @@
-import Button from "./Button";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useCitiesProvider } from "../contexts/CitiesContext";
-import styles from "./Map.module.css";
+import { useNavigate } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
@@ -13,15 +10,17 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import Button from "./Button";
+import { useCitiesProvider } from "../contexts/CitiesContext";
+import { useUrlPosition } from "../hooks/useUrlPosition";
+import styles from "./Map.module.css";
 
 const MapView = () => {
   const { cities } = useCitiesProvider();
-  const [searchParams] = useSearchParams();
-  const mapLat = searchParams.get("lat");
-  const mapLng = searchParams.get("lng");
   const [mapPosition, setMapPosition] = useState([51.505, -0.09]);
   const [isloadingLocation, setIsLoadingLocation] = useState(true);
   const [userLocation, setUserLocation] = useState([]);
+  const [mapLat, mapLng] = useUrlPosition();
   const fetchUserLocation = () => {
     if (userLocation.length > 0) {
       // We already know where the user is, so just move the map back
@@ -121,7 +120,7 @@ function LocationMarker({ userLocation }) {
 function LocationTracker({ setMapPosition }) {
   useMapEvents({
     dragend: (e) => {
-      const { lat, lng } = e.target.getCenter();
+      const { lat, lng } = e.latlng.wrap();
       setMapPosition([lat, lng]);
     },
   });
