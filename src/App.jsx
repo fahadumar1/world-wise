@@ -13,34 +13,37 @@ import City from "./components/City";
 import CountryList from "./components/CountryList";
 import Form from "./components/Form.jsx";
 import { CitiesProvider } from "./contexts/CitiesContext.jsx";
+import { AuthProvider } from "./contexts/fakeAuthContext.jsx";
 const App = () => {
   return (
-    <CitiesProvider>
-      <BrowserRouter>
-        <div className="wrapper">
-          <Header>
-            <Logo />
-            <SiteNavigation />
-          </Header>
-          <main id="main">
-            <Routes>
-              <Route index element={<Homepage />}></Route>
-              <Route path="/product" element={<Product />}></Route>
-              <Route path="/pricing" element={<Pricing />}></Route>
-              <Route path="/login" element={<Login />}></Route>
-              <Route path="/app" element={<AppLayout />}>
-                <Route index element={<Navigate replace to="cities" />} />
-                <Route path="cities" element={<CityList />} />
-                <Route path="cities/:id" element={<City />} />
-                <Route path="countries" element={<CountryList />} />
-                <Route path="form" element={<Form />} />
-              </Route>
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </main>
-        </div>
-      </BrowserRouter>
-    </CitiesProvider>
+    <AuthProvider>
+      <CitiesProvider>
+        <BrowserRouter>
+          <div className="wrapper">
+            <Header>
+              <Logo />
+              <SiteNavigation />
+            </Header>
+            <main id="main">
+              <Routes>
+                <Route index element={<Homepage />}></Route>
+                <Route path="/product" element={<Product />}></Route>
+                <Route path="/pricing" element={<Pricing />}></Route>
+                <Route path="/login" element={<Login />}></Route>
+                <Route path="/app" element={<AppLayout />}>
+                  <Route index element={<Navigate replace to="cities" />} />
+                  <Route path="cities" element={<CityList />} />
+                  <Route path="cities/:id" element={<City />} />
+                  <Route path="countries" element={<CountryList />} />
+                  <Route path="form" element={<Form />} />
+                </Route>
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </main>
+          </div>
+        </BrowserRouter>
+      </CitiesProvider>
+    </AuthProvider>
   );
 };
 
