@@ -58,7 +58,7 @@ const MapView = () => {
   //     return;
   //   }
   // }, [mapLat, mapLng]);
-  console.log(cities);
+
   return (
     <div className={styles.mapContainer}>
       {(userLocation[0] === mapPosition[0] &&
