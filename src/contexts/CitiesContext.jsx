@@ -1,39 +1,97 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useEffect, useContext, useReducer } from "react";
 const CitiesContext = createContext();
+const initialState = {
+  cities: [],
+  isLoading: true,
+  currentCity: {},
+  error: "",
+};
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "cities/loaded":
+      return {
+        ...state,
+        cities: action.payload,
+        isLoading: false,
+      };
+    case "city/created":
+      return {
+        ...state,
+        cities: [...state.cities, action.payload],
+        isLoading: false,
+        currentCity: action.payload,
+      };
+    case "city/deleted":
+      return {
+        ...state,
+        cities: state.cities.filter((city) => city.id !== action.payload),
+        isLoading: false,
+        currentCity: {},
+      };
+    case "city/loaded":
+      return {
+        ...state,
+        isLoading: false,
+        currentCity: action.payload,
+      };
+    case "loading":
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case "rejected":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+    default:
+      return {
+        ...state,
+      };
+  }
+};
 const CitiesProvider = ({ children }) => {
-  const [cities, setCities] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentCity, setCurrentCity] = useState({});
+  const [{ cities, isLoading, currentCity }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  );
   useEffect(() => {
     const fetchCities = async () => {
       try {
         const res = await fetch("http://localhost:9000/cities");
         const data = await res.json();
-        setCities(data);
+        dispatch({ type: "cities/loaded", payload: data });
       } catch {
-        alert("There was an error loading data");
-      } finally {
-        setIsLoading(false);
+        dispatch({
+          type: "rejected",
+          payload: "There was an error loading cities..",
+        });
       }
     };
     fetchCities();
   }, []);
 
   const getCity = async (cityId) => {
+    if (Number(cityId) === currentCity.id) {
+      return;
+    }
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
       const res = await fetch(`http://localhost:9000/cities/${cityId}`);
       const data = await res.json();
-      setCurrentCity(data);
+
+      dispatch({ type: "city/loaded", payload: data });
     } catch {
-      alert("Ther was an error loading data...");
-    } finally {
-      setIsLoading(false);
+      dispatch({
+        type: "rejected",
+        payload: "There was an error loading city...",
+      });
     }
   };
   const createCity = async (newCity) => {
     try {
-      setIsLoading(true);
+      dispatch({ type: "loading" });
       await fetch(`http://localhost:9000/cities/`, {
         method: "POST",
         body: JSON.stringify(newCity),
@@ -41,27 +99,27 @@ const CitiesProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       });
-      setCities((prev) => [...prev, newCity]);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: "city/created", payload: newCity });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error creating a new city...",
+      });
     }
   };
   const deleteCity = async (e, cityId) => {
     e.preventDefault();
-    e.stopPropagation();
     try {
-      setIsLoading(true);
+      dispatch({ type: "loading" });
       await fetch(`http://localhost:9000/cities/${cityId}`, {
         method: "DELETE",
       });
-      const newCityList = cities.filter((city) => city.id !== cityId);
-      setCities([...newCityList]);
+      dispatch({ type: "city/deleted", payload: cityId });
     } catch {
-      console.log("There was an error deleting city.");
-    } finally {
-      setIsLoading(false);
+      dispatch({
+        type: "rejected",
+        payload: "There was an error deleting a city...",
+      });
     }
   };
 

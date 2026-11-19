@@ -1,4 +1,60 @@
 {
-  "cities": [],
+  "cities": [
+    {
+      "cityName": "Hansi",
+      "countryName": "India",
+      "date": "2026-11-19T10:22:28.709Z",
+      "notes": "Great Tip",
+      "position": {
+        "lat": "29.05616970274342",
+        "lng": "76.04736328125"
+      },
+      "id": "qCf4RefjOto"
+    },
+    {
+      "cityName": "Fort Abbas",
+      "countryName": "Pakistan",
+      "date": "2026-11-19T10:22:28.709Z",
+      "notes": "Amazing Trip",
+      "position": {
+        "lat": "28.8831596093235",
+        "lng": "72.59765625000001"
+      },
+      "id": "YhBymVedqlM"
+    },
+    {
+      "cityName": "Dera Ismail Khan",
+      "countryName": "Pakistan",
+      "date": "2026-11-19T10:29:26.961Z",
+      "notes": "",
+      "position": {
+        "lat": "31.87755764334002",
+        "lng": "70.86181640625001"
+      },
+      "id": "TiaiYMni3Mg"
+    },
+    {
+      "cityName": "Deh",
+      "countryName": "India",
+      "date": "2026-11-19T11:13:39.887Z",
+      "notes": "Great",
+      "position": {
+        "lat": "27.293689224852407",
+        "lng": "74.04785156250001"
+      },
+      "id": "KMOUOPyAtuk"
+    },
+    {
+      "cityName": "Chamba",
+      "countryName": "India",
+      "date": "2026-11-19T11:15:26.185Z",
+      "notes": "",
+      "position": {
+        "lat": "32.37996146435729",
+        "lng": "76.28906250000001"
+      },
+      "id": "yfiyfozmey8"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
