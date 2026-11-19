@@ -14,6 +14,7 @@ import CountryList from "./components/CountryList";
 import Form from "./components/Form.jsx";
 import { CitiesProvider } from "./contexts/CitiesContext.jsx";
 import { AuthProvider } from "./contexts/fakeAuthContext.jsx";
+import ProtcetedRoutes from "./pages/ProtcetedRoutes.jsx";
 const App = () => {
   return (
     <AuthProvider>
@@ -30,7 +31,14 @@ const App = () => {
                 <Route path="/product" element={<Product />}></Route>
                 <Route path="/pricing" element={<Pricing />}></Route>
                 <Route path="/login" element={<Login />}></Route>
-                <Route path="/app" element={<AppLayout />}>
+                <Route
+                  path="/app"
+                  element={
+                    <ProtcetedRoutes>
+                      <AppLayout />
+                    </ProtcetedRoutes>
+                  }
+                >
                   <Route index element={<Navigate replace to="cities" />} />
                   <Route path="cities" element={<CityList />} />
                   <Route path="cities/:id" element={<City />} />

@@ -7,12 +7,16 @@ import { useCitiesProvider } from "../contexts/CitiesContext";
 const CountryList = () => {
   const { cities, isLoading } = useCitiesProvider();
   const countries = cities.reduce((acc, cur) => {
-    if (acc.some((country) => country.country === cur.country)) {
+    if (acc.some((country) => country.countryName === cur.countryName)) {
       return acc;
     } else {
-      return [...acc, { country: cur.country, emoji: cur.emoji, id: cur.id }];
+      return [
+        ...acc,
+        { countryName: cur.countryName, emoji: cur.emoji, id: cur.id },
+      ];
     }
   }, []);
+  console.log(countries);
   return isLoading ? (
     <Spinner />
   ) : cities.length ? (
