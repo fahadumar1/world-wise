@@ -22,11 +22,6 @@ const MapView = () => {
   const [userLocation, setUserLocation] = useState([]);
   const [mapLat, mapLng] = useUrlPosition();
   const fetchUserLocation = () => {
-    if (userLocation.length > 0) {
-      // We already know where the user is, so just move the map back
-      setMapPosition(userLocation);
-      return;
-    }
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -47,16 +42,23 @@ const MapView = () => {
     }
   };
   useEffect(() => {
-    if (!(mapLat && mapLng)) {
-      fetchUserLocation();
-    }
-  }, []);
-  useEffect(() => {
     if (mapLat && mapLng) {
       setMapPosition([mapLat, mapLng]);
-      return;
+    } else {
+      if (userLocation.length > 0) {
+        setMapPosition(userLocation);
+        return;
+      }
+      fetchUserLocation();
     }
-  }, [mapLat, mapLng]);
+  }, [mapLat, mapLng, userLocation]);
+  // useEffect(() => {
+  //   if (mapLat && mapLng) {
+  //     setMapPosition([mapLat, mapLng]);
+  //     return;
+  //   }
+  // }, [mapLat, mapLng]);
+  console.log(cities);
   return (
     <div className={styles.mapContainer}>
       {(userLocation[0] === mapPosition[0] &&

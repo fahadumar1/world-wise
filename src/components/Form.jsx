@@ -1,13 +1,16 @@
 import { useEffect, useReducer } from "react";
+import { useCitiesProvider } from "../contexts/CitiesContext";
 import Button from "./Button";
 import styles from "./Form.module.css";
 import BackButton from "./BackButton";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 import Message from "./Message";
 import Spinner from "./Spinner";
-
-// function convertToEmoji(countryCode) {
-//   const codePoints = countryCode
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
+// function convertToEmoji(countryNameCode) {
+//   const codePoints = countryNameCode
 //     .toUpperCase()
 //     .split("")
 //     .map((char) => 127397 + char.charCodeAt());
@@ -18,7 +21,7 @@ const BASE_URL = "https://api-bdc.net/data/reverse-geocode?";
 const API_KEY = import.meta.env.VITE_REVERSE_GEOCODING_API_KEY;
 const initialState = {
   cityName: "",
-  country: "",
+  countryName: "",
   notes: "",
   date: new Date(),
   isLoadingGeoLocation: false,
@@ -27,11 +30,17 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "setCityName":
-      return { ...state, cityName: action.payload };
+      return {
+        ...state,
+        cityName: action.payload.cityName,
+        countryName: action.payload.countryName,
+      };
     case "setNote":
       return { ...state, notes: action.payload };
     case "setDate":
       return { ...state, date: action.payload };
+    case "newCitySubmission":
+      return {};
     case "setError":
       return { ...state, errorGeoLocation: action.payload };
     case "setLoading":
@@ -45,10 +54,19 @@ const reducer = (state, action) => {
 };
 function Form() {
   const [
-    { cityName, country, notes, date, isLoadingGeoLocation, errorGeoLocation },
+    {
+      cityName,
+      countryName,
+      notes,
+      date,
+      isLoadingGeoLocation,
+      errorGeoLocation,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
   const [mapLat, mapLng] = useUrlPosition();
+  const { createCity, isLoading } = useCitiesProvider();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchCityData = async () => {
       try {
@@ -63,7 +81,10 @@ function Form() {
         const data = await res.json();
         dispatch({
           type: "setCityName",
-          payload: data.city || data.locality || "",
+          payload: {
+            cityName: data.city || data.locality || "",
+            countryName: data.countryName,
+          },
         });
       } catch (err) {
         dispatch({ type: "setError", payload: err.message });
@@ -75,12 +96,33 @@ function Form() {
       fetchCityData();
     }
   }, [mapLat, mapLng]);
+  const handleSubmission = async (e) => {
+    e.preventDefault();
+    if (!cityName || !date) {
+      dispatch({
+        type: "setError",
+        payload: "Please Enter City Name and Date",
+      });
+    }
+    const newCity = {
+      cityName,
+      countryName,
+      date,
+      notes,
+      position: { lat: mapLat, lng: mapLng },
+    };
+    await createCity(newCity);
+    navigate("/app");
+  };
   return isLoadingGeoLocation ? (
     <Spinner />
   ) : errorGeoLocation ? (
     <Message message={errorGeoLocation} />
   ) : mapLat && mapLng ? (
-    <form className={styles.form}>
+    <form
+      className={`${styles.form} ${isLoading ? `${styles.loading}` : ""}`}
+      onSubmit={(e) => handleSubmission(e)}
+    >
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -95,11 +137,10 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
+        <DatePicker
           id="date"
-          onChange={(e) =>
-            dispatch({ type: "setDate", payload: e.target.value })
-          }
+          selected={date}
+          onChange={(date) => dispatch({ type: "setDate", payload: date })}
           value={date}
         />
       </div>
@@ -116,9 +157,7 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
-        <Button onClick={() => {}} btnType="primary">
-          Add
-        </Button>
+        <Button btnType="primary">Add</Button>
         <BackButton btnType="back"></BackButton>
       </div>
     </form>

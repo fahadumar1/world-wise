@@ -1,40 +1,82 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
-      "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": 73930385
-    },
-    {
-      "cityName": "Madrid",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
+      "cityName": "Hassan Abdal",
+      "countryName": "Pakistan",
+      "date": "2026-11-18T17:51:22.249Z",
       "notes": "",
       "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
+        "lat": "33.7243396617476",
+        "lng": "72.66357421875001"
       },
-      "id": 17806751
+      "id": "Bfgm5wYMeaA"
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "cityName": "Hassan Abdal",
+      "countryName": "Pakistan",
+      "date": "2026-11-18T17:53:47.037Z",
+      "notes": "",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
+        "lat": "33.7243396617476",
+        "lng": "72.66357421875001"
       },
-      "id": 98443197
+      "id": "7iEfzz1-NSU"
+    },
+    {
+      "cityName": "Hassan Abdal",
+      "countryName": "Pakistan",
+      "date": "2026-11-18T17:53:47.037Z",
+      "notes": "",
+      "position": {
+        "lat": "33.7243396617476",
+        "lng": "72.66357421875001"
+      },
+      "id": "i5k2XJws6bA"
+    },
+    {
+      "cityName": "Darya Khan",
+      "countryName": "Pakistan",
+      "date": "2026-11-18T17:53:47.037Z",
+      "notes": "",
+      "position": {
+        "lat": "31.85889704445453",
+        "lng": "71.41113281250001"
+      },
+      "id": "-JhnW9meRb0"
+    },
+    {
+      "cityName": "Sherani Tehsil",
+      "countryName": "Pakistan",
+      "date": "2026-11-18T17:55:47.209Z",
+      "notes": "",
+      "position": {
+        "lat": "32.045332838858506",
+        "lng": "69.78515625000001"
+      },
+      "id": "IsbUSZ-W4kU"
+    },
+    {
+      "cityName": "Surab",
+      "countryName": "Pakistan",
+      "date": "2026-11-18T17:55:47.209Z",
+      "notes": "",
+      "position": {
+        "lat": "28.323724553546015",
+        "lng": "66.29150390625001"
+      },
+      "id": "EORqzLYkoks"
+    },
+    {
+      "cityName": "Surab",
+      "countryName": "Pakistan",
+      "date": "2026-11-18T17:57:41.084Z",
+      "notes": "",
+      "position": {
+        "lat": "28.323724553546015",
+        "lng": "66.29150390625001"
+      },
+      "id": "oU6QtMX9ZPw"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
